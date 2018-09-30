@@ -54,7 +54,7 @@ class UserInfo extends Component {
 	}
 
 	componentDidMount() {
-		fetch('http://api.pecfest.in/v1/user/' + this.props.userId, { headers: { 'Authorization': 'Basic ' + window.sessionKey }})
+		fetch('https://api.pecfest.in/v1/user/' + this.props.userId, { headers: { 'Authorization': 'Basic ' + window.sessionKey }})
 			.then(res => res.json())
 			.then(user => {
 				if (user.ACK == 'SUCCESS'){
@@ -108,7 +108,7 @@ class SelectedEvent extends Component {
 	}
 
 	componentDidMount() {
-		fetch('http://api.pecfest.in/v1/event/' + this.props.eventId + '/registrations',
+		fetch('https://api.pecfest.in/v1/event/' + this.props.eventId + '/registrations',
 			 { headers: { 'Authorization': 'Basic ' + window.sessionKey }})
 			.then(res => res.json())
 			.then(registrations => {
@@ -161,7 +161,7 @@ export default class Registrations extends Component {
 	}
 
 	componentDidMount() {
-		fetch('http://api.pecfest.in/v1/events')
+		fetch('https://api.pecfest.in/v1/events')
 			.then(data => data.json())
 			.then(events => this.setState({ events: events.ACK != 'FAILED' ? events : [], status: events.message, loading: events.ACK == 'FAILED' }))
 			.catch(err => this.setState({ loading: false, status: err.message || 'Failed to fetch'}))

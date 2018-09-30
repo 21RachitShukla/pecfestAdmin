@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Editor from './Editor';
 
-const prefix = 'http://api.pecfest.in'
+const prefix = 'https://api.pecfest.in'
 export default class EditEvent extends Component {
 
   getColumns() {

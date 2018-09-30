@@ -23,7 +23,7 @@ class Login extends Component {
       return;
     }
 
-    fetch('http://api.pecfest.in/v1/portal/user/coordinator', {
+    fetch('https://api.pecfest.in/v1/portal/user/coordinator', {
       method: 'POST',
       headers: {
         'Authorization': 'Basic ' + btoa(this.state.userId + ':' + this.state.password)
