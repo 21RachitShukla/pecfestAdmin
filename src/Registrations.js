@@ -28,6 +28,9 @@ class ListEvents extends Component {
 	render() {
 		return (
 			<div className="col-2">
+                <div className="stats">
+                    Total: {this.props.events.length}
+                </div>
 		        <div className="SearchBox">
 		          <input type="search" onChange={this.handleFilter} placeholder={"Type to search"} />
 		        </div>
@@ -48,49 +51,21 @@ class ListEvents extends Component {
 	}
 }
 
-class UserInfo extends Component {
-	state = {
-		message: 'Loading...'
-	}
-
-	componentDidMount() {
-		fetch('https://api.pecfest.in/v1/user/' + this.props.userId, { headers: { 'Authorization': 'Basic ' + window.sessionKey }})
-			.then(res => res.json())
-			.then(user => {
-				if (user.ACK == 'SUCCESS'){
-					this.setState({ user, message: `${user.college}`+" "+`${user.email}`+" "+`${user.mobile}`});
-					//var str = JSON.stringify(user);
-					//str = JSON.stringify(user, null, 4); // (Optional) beautiful indented output.
-					//console.log(str); // Logs output to dev tools console.
-				}
-				else {
-					this.setState({ message: user.message || 'Failed to load'})
-				}
-			})
-			.catch(err => this.setState({ message: err.message || 'Failed to load'}))
-	}
-
-	render() {
-		return <span style={{ color: 'rgba(0, 0, 0, 0.5)' }}>&nbsp;{this.state.message}</span>
-	}
-}
-
 class Registration extends Component {
 	render() {
 		return (
 			<div className="Registration">
 				<div className="Registration-leader">
-					Leader: {this.props.registration.leaderId} ({ this.props.registration.leaderName }) <UserInfo userId={this.props.registration.leaderId} />
+					Leader: {this.props.registration.leaderName} ({this.props.registration.leaderId}) ({this.props.registration.leaderCollege}) ({this.props.registration.leaderEmail}) ({this.props.registration.leaderMobile})
 				</div>
 				<div className="Registration-team">
-				<small style={{display: 'block'}}>{this.props.registration.team.length === 1 ? '' : 'Team: '}</small>
+				<small style={{display: 'block'}}>{this.props.registration.members.length === 1 ? '' : 'Team: '}</small>
 				{
-					this.props.registration.team.length === 1 ? '' :
-						this.props.registration.team.map(member => {
+					this.props.registration.members.length === 1 ? '' :
+						this.props.registration.members.map(member => {
 							return (
 								<div className="Team-member" key={member.id}>
-								{member.memberId} ({member.name})
-									<UserInfo userId={member.memberId} />
+								{member.memberName} ({member.memberId}) ({member.memberCollege}) ({member.memberEmail}) ({member.memberMobile})
 								</div>
 							)
 						})
@@ -112,8 +87,9 @@ class SelectedEvent extends Component {
 			 { headers: { 'Authorization': 'Basic ' + window.sessionKey }})
 			.then(res => res.json())
 			.then(registrations => {
-				if (registrations.ACK != 'FAILED')
-					this.setState({ registrations, registrationsToShow: registrations, loading: false })
+				if (registrations.ACK != 'FAILED') {
+                    this.setState({registrations, registrationsToShow: registrations.teams, loading: false});
+                }
 				else {
 					this.setState({ status: registrations.message || 'FAILED'});
 				}
@@ -140,6 +116,9 @@ class SelectedEvent extends Component {
 	render() {
 		return (
 			<div className="col-5">
+                <div className="stats">
+					Total Registrations: {this.state.loading ? 0 : this.state.registrationsToShow.length}
+                </div>
 				<div className="SearchBox" style={{ margin: '1em'}}>
 		          <input type="search" onChange={this.handleFilter} placeholder={"Enter the member/leader name"} />
 				</div>
